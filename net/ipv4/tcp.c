@@ -3439,7 +3439,7 @@ static void __init tcp_init_mem(void)
 	sysctl_tcp_mem[2] = sysctl_tcp_mem[0] * 2;	/* 9.37 % */
 }
 
-extern void rust_fn();
+extern void rust_fn(void);
 
 void __init tcp_init(void)
 {
