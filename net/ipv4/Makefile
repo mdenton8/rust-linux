@@ -3,10 +3,10 @@
 #
 
 $(obj)/rs-tcp.o: $(src)/tcp.rs
-        rustc -O -C prefer-dynamic $(src)/tcp.rs
-        ar x libtcp.rlib tcp.0.o
-        mv tcp.0.o $(src)/rs-tcp.o
-        rm libtcp.rlib
+	    rustc -O -C prefer-dynamic $(src)/tcp.rs
+	    ar x libtcp.rlib tcp.0.o
+	    mv tcp.0.o $(src)/rs-tcp.o
+	    rm libtcp.rlib
 
 
 obj-y     := route.o inetpeer.o protocol.o \
