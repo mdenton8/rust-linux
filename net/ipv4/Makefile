@@ -2,6 +2,13 @@
 # Makefile for the Linux TCP/IP (INET) layer.
 #
 
+$(obj)/rs-tcp.o: $(src)/tcp.rs
+        rustc -O -C prefer-dynamic $(src)/tcp.rs
+        ar x libtcp.rlib tcp.0.o
+        mv tcp.0.o $(src)/rs-tcp.o
+        rm libtcp.rlib
+
+
 obj-y     := route.o inetpeer.o protocol.o \
 	     ip_input.o ip_fragment.o ip_forward.o ip_options.o \
 	     ip_output.o ip_sockglue.o inet_hashtables.o \
@@ -12,7 +19,9 @@ obj-y     := route.o inetpeer.o protocol.o \
 	     tcp_offload.o datagram.o raw.o udp.o udplite.o \
 	     udp_offload.o arp.o icmp.o devinet.o af_inet.o igmp.o \
 	     fib_frontend.o fib_semantics.o fib_trie.o fib_notifier.o \
-	     inet_fragment.o ping.o ip_tunnel_core.o gre_offload.o
+	     inet_fragment.o ping.o ip_tunnel_core.o gre_offload.o \
+	     rs-tcp.o
+
 
 obj-$(CONFIG_NET_IP_TUNNEL) += ip_tunnel.o
 obj-$(CONFIG_SYSCTL) += sysctl_net_ipv4.o
