@@ -1,0 +1,14 @@
+[package]
+name = "keys"
+version = "0.1.0"
+authors = ["Matthew Denton <mdenton@cs.stanford.edu>"]
+
+[lib]
+crate-type = ["staticlib"]
+
+[dependencies]
+rlibc = "1.0.0"
+
+[build-dependencies]
+bindgen = "0.32.0"
+shlex = "0.1.*"
