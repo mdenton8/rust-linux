@@ -31,6 +31,7 @@ mod os;
 mod linux_allocator;
 #[macro_use]
 mod io;
+mod user_ptr;
 
 use linux_allocator::LinuxAllocator;
 #[global_allocator]
@@ -61,17 +62,6 @@ enum Payload {
 	Keyring(alloc::LinkedList<Key>), // TODO BTreeMap between Description and Key
 	Data(),
 	RejectError(isize),
-}
-
-enum UserPtr {
-	U8Ptr(*mut u8),
-	U16Ptr(*mut u16),
-	U32Ptr(*mut u32),
-	U64Ptr(*mut u64),
-	StrPtr(*mut u8),
-	VarLenPtr(*mut u8, isize),
-	AlreadyReadFrom(*mut u8),
-	AlreadyReadFromVarLen(*mut u8, isize),
 }
 
 

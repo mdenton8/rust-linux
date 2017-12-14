@@ -1150,7 +1150,9 @@ extern void rust_hello(void);
  */
 void __init key_init(void)
 {
+	printk("Calling rust_hello");
 	rust_hello();
+	printk("Just called rust_hello");
 
 	/* allocate a slab in which we can store keys */
 	key_jar = kmem_cache_create("key_jar", sizeof(struct key),

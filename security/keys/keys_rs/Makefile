@@ -47,4 +47,3 @@ CARGO_BLD_DIR := $(src)/target/$(if ${RELEASE},release,debug)
 $(obj)/libkeys.a: ${RUST_FILES} FORCE
 	cd $(src) && env STD_CLANG_ARGS='${c_flags}' STD_KERNEL_PATH='${CURDIR}' STD_CLANG_FILES='${KERNEL_INCLUDE}' "${CARGO}" rustc $(if ${RELEASE},--release) $(if ${V},--verbose) ${CARGOFLAGS} --target="${UTS_MACHINE}-unknown-none-gnu" -- ${RCFLAGS}
 	cp "${CARGO_MOD_DIR}/libkeys.a" $(obj)
-	# TODO on copying....
