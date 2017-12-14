@@ -11,7 +11,8 @@
 # rust-target := lib${KERNEL_MODULE}.a
 
 # Tell kbuild which files to build
-obj-y                 := keys_rs.o
+obj-y                 := keys-rust.o
+keys-rust-objs        := libkeys.a
 # ${KERNEL_MODULE}-objs := $(patsubst %.c,%.o,${C_FILES}) ${rust-target}
 
 # Strip unused symbols from the input object file
@@ -43,8 +44,7 @@ CARGO_BLD_DIR := $(src)/target/$(if ${RELEASE},release,debug)
 # Note: UTS_MACHINE is the architecture of the target kernel, Rust compilation will  fail  unless  a
 #       target file (such as "x86_64-unknown-none-gnu.json") was created for the architecture of the
 #       kernel you're trying to compile this module for.
-$(obj)/keys_rs.o: ${RUST_FILES} FORCE
-	echo $(OUT_DIR)
+$(obj)/libkeys.a: ${RUST_FILES} FORCE
 	cd $(src) && env STD_CLANG_ARGS='${c_flags}' STD_KERNEL_PATH='${CURDIR}' STD_CLANG_FILES='${KERNEL_INCLUDE}' "${CARGO}" rustc $(if ${RELEASE},--release) $(if ${V},--verbose) ${CARGOFLAGS} --target="${UTS_MACHINE}-unknown-none-gnu" -- ${RCFLAGS}
-	# cp "${CARGO_MOD_DIR}/${rust-target}" $(obj)
+	cp "${CARGO_MOD_DIR}/libkeys.a" $(obj)
 	# TODO on copying....

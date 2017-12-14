@@ -1143,11 +1143,15 @@ void unregister_key_type(struct key_type *ktype)
 }
 EXPORT_SYMBOL(unregister_key_type);
 
+extern void rust_hello(void);
+
 /*
  * Initialise the key management state.
  */
 void __init key_init(void)
 {
+	rust_hello();
+
 	/* allocate a slab in which we can store keys */
 	key_jar = kmem_cache_create("key_jar", sizeof(struct key),
 			0, SLAB_HWCACHE_ALIGN|SLAB_PANIC, NULL);

@@ -8,6 +8,7 @@ crate-type = ["staticlib"]
 
 [dependencies]
 rlibc = "1.0.0"
+compiler_builtins = { git = "https://github.com/rust-lang-nursery/compiler-builtins" }
 
 [build-dependencies]
 bindgen = "0.32.0"

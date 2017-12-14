@@ -17,6 +17,8 @@ const CLANG_ARGS_BLACKLIST: [&'static str; 10] = [
 ];
 
 fn main() {
+    // tell cargo to only rerun the build script if linux_headers.h changes...
+    println!("cargo:rerun-if-changed=linux_headers.h");
 
     // change to kernel working directory, save current wd first
     let curr_wd = env::current_dir().unwrap();
@@ -72,6 +74,7 @@ fn main() {
         .clang_arg("-Dtrue=__true")
         .clang_arg("-Du64=__u64")
         .clang_args(clang_args.iter())
+        .opaque_type("timex")
         .header(curr_wd.join("linux_headers.h").to_string_lossy())
         // Finish the builder and generate the bindings.
         .generate()

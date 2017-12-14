@@ -1,21 +1,40 @@
 // for "language items" like eh_personality and panic_fmt
 #![feature(lang_items)]
 
+// This is so the bindings can generate unions with "non-Copyable" structs in them
+#![feature(untagged_unions)]
+
 // coz we don't have an operating system
 #![no_std]
-#![feature(no_std, core)]
+#![feature(core)]
 
 // so we can use unions with non-Copyable structs. Thought it should be in os.rs....
 #![feature(untagged_unions)]
 
 // so we can define a custom allocator (wrapper for Linux allocator)
 #![feature(alloc)]
+#![feature(global_allocator)]
+#![feature(allocator_api)]
+
+// so we can avoid linker errors on intrinsics,
+// I'm not sure why I need intrinsics but I don't want the errors....
+#![feature(compiler_builtins_lib)]
 
 //#[macro_use]
 extern crate alloc;
 
+// to prevent vmlinux linker errors on intrinsics like __udivti3
+extern crate compiler_builtins;
+
 mod c_types;
 mod os;
+mod linux_allocator;
+#[macro_use]
+mod io;
+
+use linux_allocator::LinuxAllocator;
+#[global_allocator]
+static MY_ALLOCATOR: LinuxAllocator = LinuxAllocator {};
 
 
 struct KeyLengths {
@@ -55,11 +74,18 @@ enum UserPtr {
 	AlreadyReadFromVarLen(*mut u8, isize),
 }
 
+
+#[no_mangle]
+pub extern fn rust_hello() {
+	println!("Hello from Rust!!!!");
+}
+
+
 // TODO actual types?
 #[no_mangle]
-pub extern fn add_key(key_type : *mut u8, description : *mut u8, payload : *mut u8, plen : isize, ringid: i32) {
+pub extern fn rust_add_key(key_type : *mut u8, description : *mut u8, payload : *mut u8, plen : isize, ringid: i32) {
 	// search for keyring
-
+	println!("Hello from Rust!!!!");
 	// create or update key
 }
 
@@ -67,7 +93,7 @@ pub extern fn add_key(key_type : *mut u8, description : *mut u8, payload : *mut 
 
 
 #[lang = "eh_personality"] extern fn eh_personality() {}
-#[lang = "eh_unwind_resume"] extern fn eh_unwind_resume() {}
+// #[lang = "eh_unwind_resume"] extern fn eh_unwind_resume() {}
 #[lang = "panic_fmt"] #[no_mangle] pub extern fn panic_fmt() -> ! {loop{}}
 
 // #[lang = "panic_fmt"]
@@ -84,3 +110,9 @@ pub extern fn add_key(key_type : *mut u8, description : *mut u8, payload : *mut 
 //     // If that doesn't work, loop forever.
 //     loop{}
 // }
+
+// using this to avoid vmlinux linker error.... Not supported in
+// compiler_builtins just yet, and why do I need floats here???
+// I thought +soft-float would take care of this........
+#[no_mangle]
+pub extern "C" fn __floatundisf() {}

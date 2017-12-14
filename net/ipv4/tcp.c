@@ -3439,15 +3439,11 @@ static void __init tcp_init_mem(void)
 	sysctl_tcp_mem[2] = sysctl_tcp_mem[0] * 2;	/* 9.37 % */
 }
 
-extern void rust_fn(void);
-
 void __init tcp_init(void)
 {
 	int max_rshare, max_wshare, cnt;
 	unsigned long limit;
 	unsigned int i;
-	
-	rust_fn();
 
 	BUILD_BUG_ON(sizeof(struct tcp_skb_cb) >
 		     FIELD_SIZEOF(struct sk_buff, cb));
